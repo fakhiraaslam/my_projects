@@ -46,14 +46,6 @@ def get_stock_data(stock_symbol, start_date, end_date):
 stock_data = get_stock_data('AAPL', start_date, end_date)
 print(stock_data)
 
-# Create the dataset using sentiment scores and percentage stock price change
-def create_dataset_for_regression(sentiment_scores, stock_data):
-    # Sentiment scores as features (X)
-    X = np.array(sentiment_scores[:-1])  # Use sentiment scores for days 0 to n-1
-    # Percentage change in closing price as target (y)
-    y = calculate_price_change(stock_data)  # Use price change from days 1 to n
-    return X, y
-
 def calculate_price_change(stock_data):
     close_prices = stock_data['Close'].values
     # Calculate percentage change in closing prices
@@ -62,7 +54,6 @@ def calculate_price_change(stock_data):
 
 # Create the dataset using sentiment scores and percentage stock price change
 def create_dataset_for_regression(sentiment_scores, stock_data):
-    # Ensure the sentiment scores and stock data align correctly
     num_samples = min(len(sentiment_scores), len(stock_data['Close']) - 1)
     
     # Use sentiment scores for days 0 to num_samples-1
@@ -73,7 +64,6 @@ def create_dataset_for_regression(sentiment_scores, stock_data):
     
     return X, y
 
-# Example usage (assuming sentiment_scores and stock_data are already fetched)
 X, y = create_dataset_for_regression(sentiment_scores, stock_data)
 
 # Reshape X to 2D array (n_samples, 1 feature) for linear regression
@@ -89,13 +79,11 @@ model.fit(X_train, y_train)
 # Test the model (predictions for X_test)
 predictions = model.predict(X_test)
 
-# Sort the test set for better visualization
 sorted_idx = np.argsort(X_test[:, 0])
 X_test_sorted = X_test[sorted_idx]
 predictions_sorted = predictions[sorted_idx]
 y_test_sorted = y_test[sorted_idx]
 
-# Plot the graph
 plt.figure(figsize=(10, 6))
 
 # Plot actual stock price percentage change
@@ -109,5 +97,4 @@ plt.ylabel('Stock Price Change (%)')
 plt.title('Linear Regression: Sentiment Score vs Stock Price Change')
 plt.legend()
 
-# Show the plot
 plt.show()
