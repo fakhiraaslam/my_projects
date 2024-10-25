@@ -12,7 +12,6 @@ newsapi = NewsApiClient(api_key='f8e4a91e06dd47e4a3c1055ca58df828')
 
 def get_news(stock_name, start_date, end_date):
     articles_list = []
-    # Generate date range using rrule
     for dt in rrule.rrule(rrule.DAILY, dtstart=start_date, until=end_date):
         day_str = dt.strftime('%Y-%m-%d')
         articles = newsapi.get_everything(q=stock_name, from_param=day_str, to=day_str, language='en', sort_by='relevancy')
@@ -24,10 +23,8 @@ start_date = datetime.datetime(2024, 9, 25)
 end_date = datetime.datetime(2024, 10, 24)
 articles = get_news('Apple', start_date, end_date)
 
-# Check number of articles
 print(f"Number of articles found: {len(articles)}")
 
-# Initialize SentimentIntensityAnalyzer
 sia = SentimentIntensityAnalyzer()
 
 def analyze_sentiment(articles):
@@ -37,7 +34,6 @@ def analyze_sentiment(articles):
         sentiment_scores.append(sentiment['compound']) 
     return sentiment_scores
 
-# Analyze sentiment scores
 sentiment_scores = analyze_sentiment(articles)
 print(sentiment_scores[:5])
 
@@ -49,38 +45,6 @@ def get_stock_data(stock_symbol, start_date, end_date):
 # Fetch historical stock data for the same date range
 stock_data = get_stock_data('AAPL', start_date, end_date)
 print(stock_data)
-
-def create_dataset(sentiment_scores, stock_data):
-    X = []  # Sentiment scores
-    y = []  # Stock movement (1 for up, 0 for down)
-    
-    # Align stock data with sentiment scores
-    close_prices = stock_data['Close'].values
-    for i in range(1, len(close_prices)):
-        # Sentiment score for day i corresponds to stock movement from day i-1 to day i
-        X.append(sentiment_scores[i-1])
-        # Stock movement: 1 if today's close is higher than yesterday's
-        y.append(1 if close_prices[i] > close_prices[i-1] else 0)
-    
-    return np.array(X), np.array(y)
-
-def calculate_price_change(stock_data):
-    close_prices = stock_data['Close'].values
-    price_change = np.diff(close_prices) / close_prices[:-1]  # percentage change
-    return price_change
-
-# Create the dataset using sentiment scores and percentage stock price change
-def create_dataset_for_regression(sentiment_scores, stock_data):
-    # Sentiment scores as features (X)
-    X = np.array(sentiment_scores[:-1])  # Use sentiment scores for days 0 to n-1
-    # Percentage change in closing price as target (y)
-    y = calculate_price_change(stock_data)  # Use price change from days 1 to n
-    return X, y
-
-def calculate_price_change(stock_data):
-    close_prices = stock_data['Close'].values
-    price_change = np.diff(close_prices) / close_prices[:-1]  # percentage change
-    return price_change
 
 # Create the dataset using sentiment scores and percentage stock price change
 def create_dataset_for_regression(sentiment_scores, stock_data):
