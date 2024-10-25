@@ -10,6 +10,9 @@ This project analyzes the relationship between news sentiment and stock price ch
 - Predicts stock price movements based on sentiment scores with **Linear Regression**.
 - Visualizes actual vs. predicted stock price changes.
 
+## Status and Future Work
+This project is a work in progress, and I'm continuously working on it to add new features, optimize performance, and improve prediction accuracy. Stay tuned for future updates!
+
 ## Requirements
 - Python 3.x
 - NewsAPI key (sign up at [NewsAPI](https://newsapi.org/))
