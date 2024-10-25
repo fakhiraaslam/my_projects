@@ -42,6 +42,3 @@ start_date = datetime.datetime(2024, 9, 25)
 end_date = datetime.datetime(2024, 10, 24)
 articles = get_news('Apple', start_date, end_date)
 ```
-
-## License
-This project is licensed under the MIT License.
