@@ -8,7 +8,7 @@ import numpy as np
 import yfinance as yf
 import matplotlib.pyplot as plt
 
-newsapi = NewsApiClient(api_key='f8e4a91e06dd47e4a3c1055ca58df828')
+newsapi = NewsApiClient(api_key='Insert API Key Here')
 
 def get_news(stock_name, start_date, end_date):
     articles_list = []
